@@ -1,0 +1,9 @@
+slack_bot_token = '{{ slack_openurl_bot_token | mandatory("❌ Error: Variable 'slack_openurl_bot_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+slack_app_token = '{{ slack_openurl_app_token | mandatory("❌ Error: Variable 'slack_openurl_app_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+accept_bot_message = true
+allowed_user_ids = ['U12345678','BQ1234567']
+
+[[commands]]
+keyword = 'openurl *'
+command = 'pwopen *'
+runner = 'compose'

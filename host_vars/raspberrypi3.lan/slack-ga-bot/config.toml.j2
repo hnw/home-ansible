@@ -1,0 +1,11 @@
+slack_bot_token = '{{ slack_ga_bot_token | mandatory("❌ Error: Variable 'slack_ga_bot_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+slack_app_token = '{{ slack_ga_bot_app_token | mandatory("❌ Error: Variable 'slack_ga_bot_app_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+allowed_user_ids = ['U12345678']
+
+[[commands]]
+keyword = '*'
+runner = 'http'
+method = 'POST'
+url = 'http://gaproxy:8080/'
+body = '*'
+username = 'Google Assistant'

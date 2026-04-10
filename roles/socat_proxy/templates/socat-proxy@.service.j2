@@ -1,0 +1,26 @@
+[Unit]
+Description=Single Host Proxy via socat
+{% if socat_proxy_wol_mac is defined %}
+Requires=wol@{{ socat_proxy_wol_mac }}.service
+After=network-online.target wol@{{ socat_proxy_wol_mac }}.service
+{% endif %}
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+DynamicUser=yes
+ProtectSystem=strict
+ProtectHome=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+# 1. Wait for Via Host
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 60); do if /usr/bin/socat /dev/null TCP:{{ socat_proxy_via_host }}:{{ socat_proxy_via_port }},connect-timeout=2; then exit 0; fi; sleep 2; done; exit 1'
+
+# 2. Proxy Relay (socat)
+ExecStart=/usr/bin/socat STDIO PROXY:{{ socat_proxy_via_host }}:{{ socat_proxy_target_host }}:{{ socat_proxy_target_port }},proxyport={{ socat_proxy_via_port }}
+
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal

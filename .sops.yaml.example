@@ -1,0 +1,8 @@
+# Copy this file to .sops.yaml and replace the placeholder recipients with
+# your own age public keys before encrypting any secrets.
+---
+creation_rules:
+  - path_regex: vars/.*\.sops\.ya?ml$
+    age:
+      - age1replace_with_your_primary_public_key
+      - age1replace_with_another_recipient_if_needed

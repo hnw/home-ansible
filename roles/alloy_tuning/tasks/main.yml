@@ -1,0 +1,19 @@
+---
+- name: Create Alloy WAL directory
+  ansible.builtin.file:
+    path: /var/lib/alloy/data
+    state: directory
+    mode: "0770"
+    owner: alloy
+    group: alloy
+  become: true
+
+- name: Mount tmpfs for Alloy WAL
+  ansible.posix.mount:
+    path: /var/lib/alloy/data
+    src: tmpfs
+    fstype: tmpfs
+    opts: "defaults,noatime,size=128M,mode=0770,uid=alloy,gid=alloy"
+    state: mounted
+  notify: Restart alloy
+  become: true

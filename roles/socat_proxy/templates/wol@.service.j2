@@ -1,0 +1,7 @@
+[Unit]
+Description=Sending Wake on LAN packet to %i
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/wakeonlan -i 255.255.255.255 %i

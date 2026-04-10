@@ -1,0 +1,29 @@
+---
+apply_roles:
+  - raspberrypi
+  - common
+  - rsyslog
+  - prometheus.prometheus.node_exporter
+  - name: linux-system-roles.podman
+    become: true
+
+raspberrypi_enable_i2c: true
+
+common_packages_extra:
+  - podman
+  - uidmap
+  - i2c-tools
+
+podman_secrets:
+  - name: smartmeter_id
+    data: "{{ smartmeter_id }}"
+  - name: smartmeter_password
+    data: "{{ smartmeter_password }}"
+  - name: smartmeter_channel
+    data: "{{ smartmeter_channel }}"
+  - name: smartmeter_ipaddr
+    data: "{{ smartmeter_ipaddr }}"
+
+podman_quadlet_specs:
+  - file_src: host_vars/{{ inventory_hostname }}/rpi-sensor-exporter.container
+  - file_src: host_vars/{{ inventory_hostname }}/smartmeter-exporter.container

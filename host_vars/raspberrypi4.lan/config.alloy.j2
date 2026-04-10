@@ -1,0 +1,10 @@
+{% extends "host_vars/_base.alloy.j2" %}
+
+{% block custom_metrics %}
+prometheus.scrape "switchbot_exporter" {
+  forward_to = [prometheus.remote_write.metrics_service.receiver]
+  targets = [
+    {"__address__" = "localhost:8000", "instance" = "{{ inventory_hostname }}"},
+  ]
+}
+{% endblock %}

@@ -1,0 +1,19 @@
+[Unit]
+Description=Prometheus Exporter for ECHONET Lite Smart Meters
+After=network-online.target
+
+[Container]
+Image=ghcr.io/hnw/smartmeter-exporter:latest
+ContainerName=smartmeter-exporter
+PublishPort=9102:9102
+AddDevice=/dev/ttyACM0
+
+Environment=SMARTMETER_DSE=true
+
+Secret=smartmeter_id,type=env,target=SMARTMETER_ID
+Secret=smartmeter_password,type=env,target=SMARTMETER_PASSWORD
+Secret=smartmeter_channel,type=env,target=SMARTMETER_CHANNEL
+Secret=smartmeter_ipaddr,type=env,target=SMARTMETER_IPADDR
+
+[Install]
+WantedBy=default.target

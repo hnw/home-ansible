@@ -1,0 +1,45 @@
+---
+- name: Apply dynamic roles to hosts
+  hosts: all
+  vars:
+    secret_vars_file: vars/secrets.sops.yml
+  tasks:
+    - name: Check local SOPS secrets file
+      ansible.builtin.stat:
+        path: "{{ secret_vars_file }}"
+      register: secret_vars_file_stat
+      delegate_to: localhost
+      run_once: true
+      tags: always
+
+    - name: Explain how to create local SOPS secrets
+      ansible.builtin.fail:
+        msg: >-
+          Missing {{ secret_vars_file }}. Copy vars/secrets.example.yml to
+          vars/secrets.sops.yml, copy .sops.yaml.example to .sops.yaml,
+          and encrypt the file with sops before running this playbook.
+      when: not secret_vars_file_stat.stat.exists
+      run_once: true
+      tags: always
+
+    - name: Load SOPS secrets
+      community.sops.load_vars:
+        file: "{{ secret_vars_file }}"
+      tags: always
+
+    - name: Include roles based on host variable
+      ansible.builtin.include_role:
+        name: "{{ role_item.name | default(role_item) }}"
+        apply:
+          become: "{{ role_item.become | default(false) | bool }}"
+          tags: >-
+            {{
+              (role_item.tags | default([]))
+              + [role_item.name | default(role_item)]
+              + [(role_item.name | default(role_item)).split('.') | last]
+            }}
+      loop: "{{ apply_roles }}"
+      loop_control:
+        loop_var: role_item
+      tags:
+        - always

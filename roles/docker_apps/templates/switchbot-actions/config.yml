@@ -1,0 +1,13 @@
+# ----------------------------------------------------
+# Prometheus Exporter Settings
+# ----------------------------------------------------
+prometheus:
+  # Enable/disable the exporter feature.
+  # Default: true
+  enabled: true
+
+# ----------------------------------------------------
+# Logging Settings
+# ----------------------------------------------------
+logging:
+  level: "INFO"

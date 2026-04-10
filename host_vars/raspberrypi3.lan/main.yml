@@ -1,0 +1,24 @@
+---
+apply_roles:
+  - raspberrypi
+  - common
+  - name: grafana.grafana.alloy
+    become: true
+  - alloy_tuning
+  - name: geerlingguy.docker
+    become: true
+  - docker_apps
+  - socat_proxy
+
+docker_apps:
+  - cadvisor
+  - cloudflared
+  - dockge
+  - name: slack-ga-bot
+    template: slack-commander
+
+socat_proxy_wol_mac: "00:11:22:33:44:55" # 公開用サンプル値
+socat_proxy_via_host: "proxy-gateway.lan" # 公開用サンプル値
+socat_proxy_via_port: "8888" # プロキシサーバのポート
+socat_proxy_target_host: "upstream.example.com" # 公開用サンプル値
+socat_proxy_target_port: "443" # 最終的な接続ポート

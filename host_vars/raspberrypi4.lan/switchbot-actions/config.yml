@@ -1,0 +1,73 @@
+---
+# ----------------------------------------------------
+# BLE Scanner Settings
+# ----------------------------------------------------
+scanner:
+  duration: 30
+  wait: 0
+
+# ----------------------------------------------------
+# Automations
+# ----------------------------------------------------
+automations:
+  - name: "Turn on Lights when motion detected"
+    if:
+      source: "switchbot"
+      conditions:
+        modelName: "WoPresence"
+        motion_detected: true
+    then:
+      type: "webhook"
+      url: "http://gaproxy:8080/"
+      payload: "共有ライトをつけて"
+  - name: "Turn off Lights if No Motion for 3 Minutes"
+    if:
+      source: "switchbot"
+      duration: "2.5m"
+      conditions:
+        modelName: "WoPresence"
+        motion_detected: false
+    then:
+      type: "webhook"
+      url: "http://gaproxy:8080/"
+      payload: "共有ライトを消して"
+  - name: "Button Press: Turn Off Light When Bright"
+    if:
+      source: "switchbot"
+      conditions:
+        modelName: "WoContact"
+        is_light: true
+        button_count: "!= {previous.button_count}"
+    then:
+      type: "webhook"
+      url: "http://gaproxy:8080/"
+      payload: "補助ライトを消して"
+  - name: "Button Press: Turn On Light When Dark"
+    if:
+      source: "switchbot"
+      conditions:
+        modelName: "WoContact"
+        is_light: false
+        button_count: "!= {previous.button_count}"
+    then:
+      type: "webhook"
+      url: "http://gaproxy:8080/"
+      payload: "補助ライトをつけて"
+
+# ----------------------------------------------------
+# Prometheus Exporter Settings
+# ----------------------------------------------------
+prometheus:
+  # Enable/disable the exporter feature.
+  # Default: true
+  enabled: true
+
+# ----------------------------------------------------
+# Logging Settings
+# ----------------------------------------------------
+logging:
+  level: "INFO"
+  format: "%(name)s - %(levelname)s - %(message)s"
+  loggers:
+    bleak: "WARNING"
+    switchbot_actions.automation: "DEBUG"

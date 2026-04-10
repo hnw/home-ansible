@@ -1,0 +1,15 @@
+---
+services:
+  switchbot-actions:
+    depends_on:
+      - gaproxy
+    environment:
+      - TZ=Asia/Tokyo
+  gaproxy:
+    image: ghcr.io/hnw/gaproxy:latest
+    container_name: gaproxy-switchbot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tokyo

@@ -1,0 +1,30 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - socat
+      - wakeonlan
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: Deploy Systemd Units
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    mode: "0644"
+  loop:
+    - wol@.service
+    - socat-proxy.socket
+    - socat-proxy@.service
+  become: true
+  notify: Reload Systemd
+
+- name: Enable and Start Socket
+  ansible.builtin.systemd:
+    name: socat-proxy.socket
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true

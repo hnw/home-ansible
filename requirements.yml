@@ -1,0 +1,9 @@
+---
+collections:
+  - community.general
+  - community.sops
+  - prometheus.prometheus
+  - grafana.grafana
+roles:
+  - src: linux-system-roles.podman
+  - src: geerlingguy.docker

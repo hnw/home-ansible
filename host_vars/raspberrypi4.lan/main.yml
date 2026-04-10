@@ -1,0 +1,19 @@
+---
+apply_roles:
+  - raspberrypi
+  - common
+  - name: grafana.grafana.alloy
+    become: true
+  - alloy_tuning
+  - name: geerlingguy.docker
+    become: true
+  - docker_apps
+
+raspberrypi_enable_bluetooth: true
+
+docker_apps:
+  - cadvisor
+  - dockge
+  - switchbot-actions
+  - name: slack-openurl
+    template: slack-commander

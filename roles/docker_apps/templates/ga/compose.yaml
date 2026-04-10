@@ -1,0 +1,10 @@
+---
+services:
+  app:
+    image: ghcr.io/hnw/g:latest
+    container_name: ga
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    env_file:
+      - .env
+    restart: unless-stopped

@@ -1,0 +1,10 @@
+---
+services:
+  slack-commander:
+    image: ghcr.io/hnw/slack-commander:latest
+    container_name: slack-commander
+    restart: unless-stopped
+    init: true
+    volumes:
+      - ./config.toml:/etc/slack-commander/config.toml:ro
+    command: --config-file=/etc/slack-commander/config.toml

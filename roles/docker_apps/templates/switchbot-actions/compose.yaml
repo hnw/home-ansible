@@ -1,0 +1,15 @@
+---
+services:
+  switchbot-actions:
+    image: ghcr.io/hnw/switchbot-actions:latest
+    container_name: switchbot-actions
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - /var/run/dbus:/var/run/dbus:ro
+      - ./config.yml:/etc/switchbot-actions/config.yml:ro
+    command: -c /etc/switchbot-actions/config.yml

@@ -1,0 +1,5 @@
+---
+# 全ホストor全グループ共通パッケージ
+common_packages: []
+# ホストごとに自由に追加できるパッケージ
+common_packages_extra: []

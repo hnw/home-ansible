@@ -1,0 +1,34 @@
+---
+all:
+  hosts:
+    raspberrypi0.lan:
+    raspberrypi3.lan:
+    raspberrypi4.lan:
+  vars:
+    common_packages:
+      - vim
+      - git
+      - curl
+
+    rsyslog_forward_target: "raspberrypi3.lan"
+
+    alloy_version: "1.14.0"
+    alloy_config: "{{ lookup('template', 'host_vars/' + inventory_hostname + '/config.alloy.j2') }}"
+
+    docker_daemon_options:
+      log-driver: "journald"
+      log-opts:
+        tag: "{{ '{{' }}.Name{{ '}}' }}"
+
+    # Hack for linux-system-roles.podman (for Debian/Raspberry Pi OS)
+    __podman_packages:
+      - podman
+      - uidmap
+
+    podman_registries_conf:
+      unqualified-search-registries:
+        - docker.io
+
+    podman_containers_conf:
+      containers:
+        log_driver: "journald"

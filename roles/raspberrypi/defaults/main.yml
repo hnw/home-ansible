@@ -1,0 +1,19 @@
+---
+raspberrypi_unnecessary_user_services:
+  - mpris-proxy.service
+  - dbus.service
+  - dbus.socket
+  - gpg-agent.service
+  - gpg-agent.socket
+  - gpg-agent-extra.socket
+  - gpg-agent-browser.socket
+  - gpg-agent-ssh.socket
+  - ssh-agent.service
+  - ssh-agent.socket
+  - dirmngr.service
+  - dirmngr.socket
+  - keyboxd.service
+  - keyboxd.socket
+  - pulseaudio.service
+  - pipewire.service
+  - obex.service

@@ -1,0 +1,20 @@
+services:
+  cadvisor:
+    image: ghcr.io/google/cadvisor:latest
+    container_name: cadvisor
+    command:
+      - "--docker_only=true"
+    restart: unless-stopped
+    devices:
+      - /dev/kmsg:/dev/kmsg:ro
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/containerd/containerd.sock:/run/containerd/containerd.sock:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    ports:
+      - "8080:8080"
+    privileged: true

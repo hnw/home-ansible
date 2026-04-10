@@ -1,0 +1,58 @@
+{% extends "host_vars/_base.alloy.j2" %}
+
+{% block custom_metrics %}
+prometheus.scrape "node_exporter" {
+  forward_to = [prometheus.remote_write.metrics_service.receiver]
+  targets = [
+    {"__address__" = "raspberrypi0.lan:9100", "instance" = "raspberrypi0.lan"},
+    {"__address__" = "sensor-node-2.lan:9100", "instance" = "sensor-node-2.lan"},
+  ]
+  job_name = "integrations/node_exporter"
+}
+
+prometheus.scrape "rpi_sensor_exporter" {
+  forward_to = [prometheus.remote_write.metrics_service.receiver]
+  targets = [
+    {"__address__" = "raspberrypi0.lan:9101", "instance" = "raspberrypi0.lan"},
+  ]
+}
+
+prometheus.scrape "smartmeter_exporter" {
+  forward_to = [prometheus.remote_write.metrics_service.receiver]
+  targets = [
+    {"__address__" = "raspberrypi0.lan:9102", "instance" = "raspberrypi0.lan"},
+  ]
+}
+
+{% endblock %}
+
+{% block custom_logs %}
+loki.relabel "journal_filter" {
+  forward_to = []
+  rule {
+    source_labels = ["__syslog_message_hostname"]
+    target_label  = "instance"
+  }
+  rule {
+    source_labels = ["__syslog_message_app_name"]
+    target_label  = "unit"
+  }
+  rule {
+    source_labels = ["__syslog_message_severity"]
+    target_label  = "level"
+  }
+  rule {
+    target_label  = "job"
+    replacement   = "integrations/node_exporter"
+  }
+}
+
+loki.source.syslog "from_rsyslog" {
+  relabel_rules = loki.relabel.journal_filter.rules
+  forward_to = [loki.write.grafana_cloud_loki.receiver]
+  listener {
+    address  = "0.0.0.0:1514"
+    protocol = "udp"
+  }
+}
+{% endblock %}

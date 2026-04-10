@@ -1,0 +1,7 @@
+/.gemini/
+repomix-output.xml
+*~
+/.ansible
+/node_modules/
+/.sops.yaml
+/vars/*.sops.yml

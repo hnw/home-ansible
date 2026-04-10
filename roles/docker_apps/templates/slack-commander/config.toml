@@ -1,0 +1,7 @@
+slack_bot_token = '{{ slack_bot_token | mandatory("❌ Error: Variable 'slack_bot_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+slack_app_token = '{{ slack_app_token | mandatory("❌ Error: Variable 'slack_app_token' is undefined. Please define it in vars/vault.yml or host_vars.") }}'
+
+[[commands]]
+keyword = 'Hello *'
+command = 'echo *'
+username = 'Echo'

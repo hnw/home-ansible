@@ -1,0 +1,11 @@
+[Container]
+AddDevice=/dev/i2c-1:/dev/i2c-1
+ContainerName=rpi-sensor-exporter
+Image=ghcr.io/hnw/rpi-sensor-exporter:latest
+PublishPort=9101:9101
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
